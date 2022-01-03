@@ -320,7 +320,7 @@ const map = {
     init: factory.ConstructionSet,
   },
   daylighting_control_definitions: {
-    displayName: 'Daylighting Control',
+    displayName: 'Skylight',
     definitionName: 'DaylightingControlDefinition',
     columns: [
       {
@@ -369,7 +369,7 @@ const map = {
     init: factory.DaylightingControlDefn,
   },
   stories: {
-    displayName: 'Story',
+    displayName: 'Storey',
     definitionName: 'Story',
     columns: [
       {
@@ -394,22 +394,22 @@ const map = {
         readonly: true,
         private: true,
       },
-      {
-        name: 'below_floor_plenum_height',
-        displayName: 'Below Floor Plenum Height',
-        input_type: 'text',
-        converter: converters.number,
-        numeric: true,
-        validator: validators.number,
-      },
-      {
-        name: 'above_ceiling_plenum_height',
-        displayName: 'Above Ceiling Plenum Height',
-        input_type: 'text',
-        converter: converters.number,
-        numeric: true,
-        validator: validators.number,
-      },
+      // {
+      //   name: 'below_floor_plenum_height',
+      //   displayName: 'Below Floor Plenum Height',
+      //   input_type: 'text',
+      //   converter: converters.number,
+      //   numeric: true,
+      //   validator: validators.number,
+      // },
+      // {
+      //   name: 'above_ceiling_plenum_height',
+      //   displayName: 'Above Ceiling Plenum Height',
+      //   input_type: 'text',
+      //   converter: converters.number,
+      //   numeric: true,
+      //   validator: validators.number,
+      // },
       {
         name: 'floor_to_ceiling_height',
         displayName: 'Floor To Ceiling Height',

@@ -261,6 +261,7 @@ export default {
   },
   watch: {
     units() { this.updateMapView(); },
+    rotation() { this.updateMapView(); },
     projectView: {
       handler() { this.updateMapView(); },
       deep: true,

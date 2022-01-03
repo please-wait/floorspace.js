@@ -4,11 +4,21 @@ const srcPath = './src';
 
 const webpack_output = readFileSync(distPath + '/index.html', { encoding: 'utf-8' });
 
-const scripts = webpack_output.split('src=').slice(1).map(scriptChunk => {
-  const jsPath = scriptChunk.split('></script>')[0];
-  console.log(`Loading scripts from: ${jsPath}\n\n`);
-  return readFileSync(distPath + jsPath, { encoding: 'utf-8' });
-}).join('\n\t');
+const scripts = webpack_output.split('<script').slice(1).map(scriptChunk => {
+  let is_embed = scriptChunk.split('>')[0].includes('src=');
+
+  if(is_embed){
+    scriptChunk = scriptChunk.split('src=')[1];
+    const jsPath = scriptChunk.split('></')[0];
+    console.log(`Loading scripts from: ${jsPath}\n\n`);
+    return readFileSync(distPath + jsPath, { encoding: 'utf-8' });
+  } else {
+    const code = scriptChunk.split('>')[1]
+    console.log(`Loading scripts from: custom code`);
+    return code.split('</')[0];
+  }
+
+}).join('\r\n\r\n')
 
 const css = webpack_output.split('<link href=').slice(1).map(linkChunk => {
   const cssPath = linkChunk.split(' rel=stylesheet>')[0];

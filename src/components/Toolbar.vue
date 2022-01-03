@@ -49,7 +49,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           </span>
         </li>
 
-        <li @click="modeTab='assign'" class="tab" data-modetab="assignments" :class="{ active: modeTab === 'assign' }">
+        <li v-if="!properateMode" @click="modeTab='assign'" class="tab" data-modetab="assignments" :class="{ active: modeTab === 'assign' }">
           <span>
             Assignments
             <tab-assign-svg  class="icon"></tab-assign-svg>
@@ -97,7 +97,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           @change="updateUnits"
         />
 
-        <div @click="showGroundPropsModal = true" title="settings">
+        <div v-if="!properateMode" @click="showGroundPropsModal = true" title="settings">
           <SettingsGear class="button" />
         </div>
       </div>
@@ -124,6 +124,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           <!-- <div @click="tool = 'Select'" data-tool="Select" title="Select" :class="{ active: tool === 'Select' }">
             <tool-move-size-svg class="button"></tool-move-size-svg>
           </div> -->
+          <!-- 
+            <div @click="tool = 'Map'" data-tool="Map" title="Map" :class="{ active: tool === 'Map' }">
+            <tool-move-size-svg class="button"></tool-move-size-svg>
+          </div>
+          -->
           <div @click="setImageTool" data-tool="Image" title="Image" :class="{ active: tool === 'Image' }">
             <tool-image-svg class="button"></tool-image-svg>
           </div>
@@ -156,8 +161,15 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       </template>
 
       <div id="grid-tools">
-        <RenderByDropdown />
-        <div title="zoom to fit">
+        <div class="tool-row">
+          <span class="tool-title">Rotation:</span> &nbsp;
+          <span>-180°</span>
+          <input type="range" style="width: 250px" :min="Math.PI*-1" :max="Math.PI" step="0.0027" @input="setRotation" v-model="sliderRotation"> 
+          <span>+180°</span>
+        </div>
+        <RenderByDropdown v-if="!properateMode" />
+        <div class="tool-row" title="zoom to fit">
+          <span class="tool-title">Fit:</span> &nbsp;
           <ZoomToFitSvg class="button" @click.native="zoomToFit"></ZoomToFitSvg>
         </div>
       </div>
@@ -202,6 +214,7 @@ export default {
   name: 'toolbar',
   data() {
     return {
+      sliderRotation: 0,
       componentTypes: {
         daylighting_control_definitions: 'Daylighting Control Definitions',
         window_definitions: 'Window Definitions',
@@ -209,9 +222,14 @@ export default {
       showSaveModal: false,
       visibleComponentType: null,
       showGroundPropsModal: false,
+      properateMode: window.api ? window.api.config.properateMode : false,
+      allowSettingUnits: window.api ? window.api.config.unitsEditable : false
     };
   },
   methods: {
+    setRotation(){
+      this.$store.dispatch('project/setMapRotation', { rotation: this.sliderRotation });
+    },
     setImageTool() {
       this.tool = 'Image';
       if (this.currentStory.images.length === 0) {
@@ -315,7 +333,7 @@ export default {
       mapEnabled: state => state.project.map.enabled,
       timetravelInitialized: state => state.timetravelInitialized,
       showImportExport: state => state.project.show_import_export,
-      allowSettingUnits: state => false, //state.project.config.unitsEditable && state.geometry.length === 1 && state.geometry[0].vertices.length === 0,
+      // allowSettingUnits: true, //state.project.config.unitsEditable && state.geometry.length === 1 && state.geometry[0].vertices.length === 0,
     }),
     currentSubselectionType: {
       get() { return this.$store.state.application.currentSelections.subselectionType; },
@@ -616,6 +634,15 @@ svg.icon, svg.button {
     span:hover:after {
       border-left-color: $gray-medium-light !important;
     }
+  }
+}
+
+.tool-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .tool-title {
+    font-weight: 800;
   }
 }
 

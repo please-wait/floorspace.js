@@ -34,6 +34,7 @@ export default {
       visible: true,
       latitude: 39.7653,
       longitude: -104.9863,
+      // ...window.api.config.defaultLocation, //overwrites the above two
       zoom: 4.5, // 18,
       rotation: 0, //.791,
       elevation: 0

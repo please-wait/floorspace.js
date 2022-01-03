@@ -63,7 +63,7 @@ export default {
       justify-content: space-between;
 
       &.active {
-        color: #02cf02;
+        color: white;
         background: $gray-medium-light;
       }
       span {

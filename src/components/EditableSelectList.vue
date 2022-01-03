@@ -12,9 +12,6 @@
           :value="selectedObjectType"
         />
         <span v-else>{{ objectTypes[0].display || objectTypes[0].displayName }}</span>
-        <a @click="addRow" v-if="addRow" class="add-new" title="Create new">
-          <AddNew class="button"/>
-        </a>
       </div>
       <div class="control-group">
         <a @click="toggleCompact" :title="compact ? 'expand' : 'contract'">
@@ -50,6 +47,9 @@
       :updateRow="editRow"
       :duplicateRow="duplicateRow"
     />
+    <a @click="addRow" v-if="addRow" class="add-new" title="Create new">
+      <AddNew class="button"/> Add New
+    </a>
   </div>
 </template>
 <script>
@@ -131,6 +131,15 @@ export default {
   height: 2rem;
   input {
     height: 1.5rem;
+  }
+}
+.add-new {
+  display: block;
+  margin: 10px;
+  font-size: 1.4em;
+  svg {
+    width: 20px;
+    height: 20px;
   }
 }
 </style>
